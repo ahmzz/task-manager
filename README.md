@@ -1,98 +1,290 @@
-<p align="center">
-  <a href="http://nestjs.com/" target="blank"><img src="https://nestjs.com/img/logo-small.svg" width="120" alt="Nest Logo" /></a>
-</p>
+NestJS Task Management API
+==========================
 
-[circleci-image]: https://img.shields.io/circleci/build/github/nestjs/nest/master?token=abc123def456
-[circleci-url]: https://circleci.com/gh/nestjs/nest
+A RESTful API built with NestJS for user authentication and task management, using PostgreSQL, JWT authentication, and TypeORM. The project is containerized with Docker for easy deployment.
 
-  <p align="center">A progressive <a href="http://nodejs.org" target="_blank">Node.js</a> framework for building efficient and scalable server-side applications.</p>
-    <p align="center">
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/v/@nestjs/core.svg" alt="NPM Version" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/l/@nestjs/core.svg" alt="Package License" /></a>
-<a href="https://www.npmjs.com/~nestjscore" target="_blank"><img src="https://img.shields.io/npm/dm/@nestjs/common.svg" alt="NPM Downloads" /></a>
-<a href="https://circleci.com/gh/nestjs/nest" target="_blank"><img src="https://img.shields.io/circleci/build/github/nestjs/nest/master" alt="CircleCI" /></a>
-<a href="https://discord.gg/G7Qnnhy" target="_blank"><img src="https://img.shields.io/badge/discord-online-brightgreen.svg" alt="Discord"/></a>
-<a href="https://opencollective.com/nest#backer" target="_blank"><img src="https://opencollective.com/nest/backers/badge.svg" alt="Backers on Open Collective" /></a>
-<a href="https://opencollective.com/nest#sponsor" target="_blank"><img src="https://opencollective.com/nest/sponsors/badge.svg" alt="Sponsors on Open Collective" /></a>
-  <a href="https://paypal.me/kamilmysliwiec" target="_blank"><img src="https://img.shields.io/badge/Donate-PayPal-ff3f59.svg" alt="Donate us"/></a>
-    <a href="https://opencollective.com/nest#sponsor"  target="_blank"><img src="https://img.shields.io/badge/Support%20us-Open%20Collective-41B883.svg" alt="Support us"></a>
-  <a href="https://twitter.com/nestframework" target="_blank"><img src="https://img.shields.io/twitter/follow/nestframework.svg?style=social&label=Follow" alt="Follow us on Twitter"></a>
-</p>
-  <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
-  [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
+Project Overview
+----------------
 
-## Description
+This API allows users to register as admins or regular users, log in to obtain JWT tokens, and manage tasks (create, read, update, delete). Tasks are scoped to users, with admins having access to all tasks and users restricted to their own.
 
-[Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.
+Prerequisites
+-------------
 
-## Project setup
+### General
 
-```bash
-$ npm install
-```
+*   **Node.js**: Required for local development (Node 22 recommended).
+    
+    *   Verify: node --version
+        
+*   **Git**: To clone the repository.
+    
+    *   Verify: git --version
+        
 
-## Compile and run the project
+### Docker Environment Prerequisites
 
-```bash
-# development
-$ npm run start
+*   **Docker**: Docker and Docker Compose must be installed.
+    
+    *   Verify: docker --version, docker-compose --version (tested with Compose 1.29.2).
+        
+*   **PostgreSQL**: An existing container named postgres-server-container running on port 5432 with:
+    
+    *   Database: tasks-db
+        
+    *   User: admin
+        
+    *   Password: Qwerty12
+        
+    *   Verify: sudo docker ps -a | grep postgres-server-container
+        
+*   **Port Availability**: Host port 3001 must be free (port 3000 is occupied).
+    
+    *   Check: sudo lsof -i :3001
+        
+*   **Docker Network**: A network named app-network for connecting the backend to postgres-server-container.
+    
+*   **PostgreSQL IP**: The IP address of postgres-server-container for docker-compose.yml.
+    
 
-# watch mode
-$ npm run start:dev
+Setup Instructions
+------------------
 
-# production mode
-$ npm run start:prod
-```
+### 1\. Clone the Repository
 
-## Run tests
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   git clone git@github.com:ahmzz/task-manager.git  cd task-manager   `
 
-```bash
-# unit tests
-$ npm run test
+### 2\. Configure Environment
 
-# e2e tests
-$ npm run test:e2e
+Create or verify the .env file in the project root:
 
-# test coverage
-$ npm run test:cov
-```
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   echo -e "DATABASE_URL=postgresql://admin:Qwerty12@localhost:5432/tasks-db\nJWT_SECRET=ashdfjhasdlkjfhalksdjhflak\nPORT=3000" > .env   `
 
-## Deployment
+*   DATABASE\_URL: Local PostgreSQL connection (overridden in Docker).
+    
+*   JWT\_SECRET: For JWT signing.
+    
+*   PORT: Container’s internal port (3000).
+    
 
-When you're ready to deploy your NestJS application to production, there are some key steps you can take to ensure it runs as efficiently as possible. Check out the [deployment documentation](https://docs.nestjs.com/deployment) for more information.
+### 3\. Verify PostgreSQL
 
-If you are looking for a cloud-based platform to deploy your NestJS application, check out [Mau](https://mau.nestjs.com), our official platform for deploying NestJS applications on AWS. Mau makes deployment straightforward and fast, requiring just a few simple steps:
+Ensure postgres-server-container is running:
 
-```bash
-$ npm install -g @nestjs/mau
-$ mau deploy
-```
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   sudo docker ps -a | grep postgres-server-container   `
 
-With Mau, you can deploy your application in just a few clicks, allowing you to focus on building features rather than managing infrastructure.
+Test connection:
 
-## Resources
+Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   sudo docker exec -it postgres-server-container psql -U admin -d tasks-db -c "\dt"   `
 
-Check out a few resources that may come in handy when working with NestJS:
+Running the Project
+-------------------
 
-- Visit the [NestJS Documentation](https://docs.nestjs.com) to learn more about the framework.
-- For questions and support, please visit our [Discord channel](https://discord.gg/G7Qnnhy).
-- To dive deeper and get more hands-on experience, check out our official video [courses](https://courses.nestjs.com/).
-- Deploy your application to AWS with the help of [NestJS Mau](https://mau.nestjs.com) in just a few clicks.
-- Visualize your application graph and interact with the NestJS application in real-time using [NestJS Devtools](https://devtools.nestjs.com).
-- Need help with your project (part-time to full-time)? Check out our official [enterprise support](https://enterprise.nestjs.com).
-- To stay in the loop and get updates, follow us on [X](https://x.com/nestframework) and [LinkedIn](https://linkedin.com/company/nestjs).
-- Looking for a job, or have a job to offer? Check out our official [Jobs board](https://jobs.nestjs.com).
+### Running with Docker
 
-## Support
+1.  sudo docker network create app-networksudo docker network connect app-network postgres-server-container
+    
+2.  sudo docker inspect postgres-server-container | grep IPAddressExample: "IPAddress": "172.17.0.2".Update docker-compose.yml’s DATABASE\_URL with this IP (e.g., postgresql://admin:Qwerty12@172.17.0.2:5432/tasks-db?schema=public).
+    
+3.  sudo docker-compose downsudo docker rm -f nest-backend-task\_backend\_1sudo docker-compose build --no-cachesudo docker-compose up -d
+    
+4.  sudo docker-compose logs backendExpect: \[Nest\] Listening on port 3000.Test API:curl http://localhost:3001
+    
 
-Nest is an MIT-licensed open source project. It can grow thanks to the sponsors and support by the amazing backers. If you'd like to join them, please [read more here](https://docs.nestjs.com/support).
+### Running Locally
 
-## Stay in touch
+1.  npm install
+    
+2.  **Ensure PostgreSQL Access**:Verify postgres-server-container is accessible at localhost:5432 or update .env’s DATABASE\_URL with the container’s IP.
+    
+3.  npm run start:devThe API will run on http://localhost:3000.
+    
+4.  curl http://localhost:3000
+    
 
-- Author - [Kamil Myśliwiec](https://twitter.com/kammysliwiec)
-- Website - [https://nestjs.com](https://nestjs.com/)
-- Twitter - [@nestframework](https://twitter.com/nestframework)
+API Endpoints
+-------------
 
-## License
+All endpoints are prefixed with /api. Authentication endpoints are public, while task endpoints require a JWT token in the Authorization: Bearer header.
 
-Nest is [MIT licensed](https://github.com/nestjs/nest/blob/master/LICENSE).
+### Authentication (AuthController)
+
+*   **POST /api/auth/register/admin**
+    
+    *   **Description**: Register a new admin user.
+        
+    *   { "email": "admin@example.com", "password": "password123", "name": "Admin User"}
+        
+    *   **Response**: { "token": "jwt-token" }
+        
+    *   **Errors**:
+        
+        *   400 Bad Request: If email already exists (AUTH\_EMAIL\_EXISTS).
+            
+*   **POST /api/auth/register/user**
+    
+    *   **Description**: Register a new regular user.
+        
+    *   { "email": "user@example.com", "password": "password123", "name": "Regular User"}
+        
+    *   **Response**: { "token": "jwt-token" }
+        
+    *   **Errors**:
+        
+        *   400 Bad Request: If email already exists (AUTH\_EMAIL\_EXISTS).
+            
+*   **POST /api/auth/login**
+    
+    *   **Description**: Log in a user and receive a JWT token.
+        
+    *   { "email": "user@example.com", "password": "password123"}
+        
+    *   **Response**: { "token": "jwt-token" }
+        
+    *   **Errors**:
+        
+        *   400 Bad Request: If user doesn’t exist (AUTH\_USER\_NOT\_EXISTS) or credentials are invalid (AUTH\_INVALID\_CREDENTIALS).
+            
+
+### Tasks (TasksController)
+
+All endpoints require JWT authentication and are restricted to ADMIN or USER roles (via RolesGuard). Admins can access all tasks, while users can only access their own.
+
+*   **POST /api/tasks**
+    
+    *   **Description**: Create a new task.
+        
+    *   { "title": "New Task", "description": "Task description", "status": "pending"}
+        
+    *   **Response**: Task object (e.g., { "id": 1, "title": "New Task", "description": "Task description", "status": "pending", "userId": 1 })
+        
+    *   **Status**: 201 Created
+        
+*   **GET /api/tasks**
+    
+    *   **Description**: Retrieve all tasks (user’s own for USER, all tasks for ADMIN).
+        
+    *   **Response**: Array of task objects
+        
+    *   **Errors**:
+        
+        *   None (empty array if no tasks).
+            
+*   **GET /api/tasks/:id**
+    
+    *   **Description**: Retrieve a specific task by ID.
+        
+    *   **Response**: Task object
+        
+    *   **Errors**:
+        
+        *   404 Not Found: If task doesn’t exist (TASK\_NOT\_FOUND).
+            
+        *   403 Forbidden: If user tries to access another user’s task (TASK\_ACCESS\_DENIED).
+            
+*   **PATCH /api/tasks/:id**
+    
+    *   **Description**: Update a task.
+        
+    *   { "title": "Updated Task", "description": "Updated description", "status": "completed"}
+        
+    *   **Response**: Updated task object
+        
+    *   **Errors**:
+        
+        *   404 Not Found: If task doesn’t exist (TASK\_NOT\_FOUND).
+            
+        *   403 Forbidden: If user tries to access another user’s task (TASK\_ACCESS\_DENIED).
+            
+*   **DELETE /api/tasks/:id**
+    
+    *   **Description**: Delete a task.
+        
+    *   **Response**: None (204 No Content)
+        
+    *   **Errors**:
+        
+        *   404 Not Found: If task doesn’t exist (TASK\_NOT\_FOUND).
+            
+        *   403 Forbidden: If user tries to access another user’s task (TASK\_ACCESS\_DENIED).
+            
+
+### Example Usage
+
+1.  curl -X POST http://localhost:3001/api/auth/register/user \\ -H "Content-Type: application/json" \\ -d '{"email":"user@example.com","password":"password123","name":"User"}'
+    
+2.  curl -X POST http://localhost:3001/api/auth/login \\ -H "Content-Type: application/json" \\ -d '{"email":"user@example.com","password":"password123"}'Save the token from the response.
+    
+3.  curl -X POST http://localhost:3001/api/tasks \\ -H "Authorization: Bearer " \\ -H "Content-Type: application/json" \\ -d '{"title":"New Task","description":"Task description","status":"pending"}'
+    
+4.  curl -X GET http://localhost:3001/api/tasks \\ -H "Authorization: Bearer "
+    
+
+Design Decisions
+----------------
+
+*   **NestJS Framework**:
+    
+    *   Chosen for its modular architecture, TypeScript support, and built-in dependency injection, simplifying API development.
+        
+*   **TypeORM**:
+    
+    *   Used for PostgreSQL interactions due to its ORM capabilities, enabling easy entity management and queries.
+        
+*   **JWT Authentication**:
+    
+    *   Implemented with JwtService and JwtAuthGuard for secure, stateless authentication. Tokens include user ID, email, and role.
+        
+*   **Role-Based Access Control**:
+    
+    *   RolesGuard and @Roles decorator ensure admins access all tasks, while users are restricted to their own, enhancing security.
+        
+*   **Bcrypt for Passwords**:
+    
+    *   Passwords are hashed with bcrypt (10 salt rounds) for secure storage.
+        
+*   **Error Handling**:
+    
+    *   Custom HttpException with structured error responses (statusCode, message, errorCode) for clear client feedback.
+        
+*   **Docker Integration**:
+    
+    *   Leverages an existing postgres-server-container to avoid redundant database setup, using app-network for connectivity.
+        
+
+Areas for Improvement
+---------------------
+
+Given more time, the following enhancements could be implemented:
+
+*   **Database Migrations**:
+    
+    *   Use TypeORM migrations to manage tasks-db schema changes, replacing synchronize: true for production safety.
+        
+*   **API Documentation**:
+    
+    *   Integrate @nestjs/swagger for interactive OpenAPI documentation.
+        
+*   **Enhanced Validation**:
+    
+    *   Add stricter DTO validation (e.g., email regex, password strength) using class-validator.
+        
+*   **Testing**:
+    
+    *   Implement unit and integration tests with @nestjs/testing and Jest for controllers and services.
+        
+*   **Refresh Tokens**:
+    
+    *   Add refresh tokens for longer sessions, improving user experience.
+        
+*   **Logging**:
+    
+    *   Use Winston for structured logging to aid debugging and monitoring.
+        
+*   **Rate Limiting**:
+    
+    *   Apply @nestjs/throttler to prevent abuse on authentication endpoints.
+        
+*   **Multi-Stage Docker Build**:
+    
+    *   Optimize image size with a multi-stage Dockerfile.
