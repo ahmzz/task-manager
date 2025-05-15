@@ -52,13 +52,13 @@ Setup Instructions
 
 ### 1\. Clone the Repository
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   git clone git@github.com:ahmzz/task-manager.git  cd task-manager   `
+ `git clone git@github.com:ahmzz/task-manager.git  cd task-manager   `
 
 ### 2\. Configure Environment
 
 Create or verify the .env file in the project root:
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   echo -e "DATABASE_URL=postgresql://admin:Qwerty12@localhost:5432/tasks-db\nJWT_SECRET=ashdfjhasdlkjfhalksdjhflak\nPORT=3000" > .env   `
+` echo -e "DATABASE_URL=postgresql://admin:Qwerty12@localhost:5432/tasks-db\nJWT_SECRET=ashdfjhasdlkjfhalksdjhflak\nPORT=3000" > .env   `
 
 *   DATABASE\_URL: Local PostgreSQL connection (overridden in Docker).
     
@@ -71,11 +71,11 @@ Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQL
 
 Ensure postgres-server-container is running:
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   sudo docker ps -a | grep postgres-server-container   `
+`sudo docker ps -a | grep postgres-server-container   `
 
 Test connection:
 
-Plain textANTLR4BashCC#CSSCoffeeScriptCMakeDartDjangoDockerEJSErlangGitGoGraphQLGroovyHTMLJavaJavaScriptJSONJSXKotlinLaTeXLessLuaMakefileMarkdownMATLABMarkupObjective-CPerlPHPPowerShell.propertiesProtocol BuffersPythonRRubySass (Sass)Sass (Scss)SchemeSQLShellSwiftSVGTSXTypeScriptWebAssemblyYAMLXML`   sudo docker exec -it postgres-server-container psql -U admin -d tasks-db -c "\dt"   `
+`sudo docker exec -it postgres-server-container psql -U admin -d tasks-db -c "\dt"   `
 
 Running the Project
 -------------------
